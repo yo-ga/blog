@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>Django 與 REST API 碰撞的火花 | Think and Code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！ REST API先來說說 REST API，有關詳細解釋可以參考維基百科的說明頁面。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。 主要提出四點：  客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給">
+<meta name="keywords" content="實習">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django 與 REST API 碰撞的火花">
+<meta property="og:url" content="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/index.html">
+<meta property="og:site_name" content="Think and Code">
+<meta property="og:description" content="剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！ REST API先來說說 REST API，有關詳細解釋可以參考維基百科的說明頁面。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。 主要提出四點：  客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2019-09-12T03:53:16.297Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django 與 REST API 碰撞的火花">
+<meta name="twitter:description" content="剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！ REST API先來說說 REST API，有關詳細解釋可以參考維基百科的說明頁面。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。 主要提出四點：  客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給">
+  
+    <link rel="alternate" href="/atom.xml" title="Think and Code" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-75587504-3', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75587504-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Think and Code</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Yoga&#39;s space</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.yo-ga.space"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Django-rest-framework" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/13/Django-rest-framework/" class="article-date">
+  <time datetime="2017-07-13T14:55:39.000Z" itemprop="datePublished">2017-07-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Django 與 REST API 碰撞的火花
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！</p>
+<h2 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h2><p>先來說說 REST API，有關詳細解釋可以參考維基百科的<a href="https://zh.wikipedia.org/zh-tw/REST" target="_blank" rel="noopener">說明頁面</a>。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。</p>
+<p>主要提出四點：</p>
+<ul>
+<li>客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給客戶端對資源進行操作的管道。</li>
+<li>連接協議具有無狀態性：<a id="more"></a>以開發客戶端的角度，必須了解每次的請求的狀態如何，才容易知道是甚麼環節出錯，諸如欄位驗證，伺服器狀態，認證狀態等。</li>
+<li>一致性的操作界面：這邊的介面傾向於 CRUD 對應 GET、POST、UPDATE、DELETE 的請求差異，搭配制式格式欄位，會讓需要使用的開發者清楚如何操作。</li>
+<li>層次化的系統：其實和上面十分相似，例如取得所有資源或是單項資源。</li>
+</ul>
+<p>這些會和接下來的 Django REST Framework 某些模組有相互對應的感覺。</p>
+<h2 id="Django-REST-Framework"><a href="#Django-REST-Framework" class="headerlink" title="Django REST Framework"></a>Django REST Framework</h2><p>在 Python 中有許多有關的模組，能協助開發者以更簡便的方式開發 API，舉凡較常見的 Flask、Pyramid。如果純粹開發 API 或許看個人習慣而有所差異，但如果同時顧及 Django 在 MVC 方面的開發，加上既有資料 models 方面，如此來說就可以擁有事半功倍的效果，那麼 Django REST Framework 會是一個不錯的選擇。</p>
+<p>關於 Django 的部分，由於此重點不再此，所以等待後續有機會再另行介紹。還有如果想嘗試，也適合自己</p>
+<p>從<a href="http://www.django-rest-framework.org/#tutorial" target="_blank" rel="noopener">官方 Tutorial</a> 的 Quick Start 部分，可以發現幾個比較重要的概念和模組。例如 Serialization、Request &amp; Responses、Viewsets、權限、授權等相關類別，當然還有 Filtering、Throtting、Pagination 等重要概念未在 Tutorial 中。底下就稍微介紹各種用法吧！</p>
+<h3 id="Serialization"><a href="#Serialization" class="headerlink" title="Serialization"></a>Serialization</h3><p>在原本 Django 在資料 models 的規劃就有一定做法，以建立型別，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class Snippet(models.Model):</span><br><span class="line">    created = models.DateTimeField(auto_now_add=True)</span><br><span class="line">    title = models.CharField(max_length=100, blank=True, default=&apos;&apos;)</span><br><span class="line">    code = models.TextField()</span><br><span class="line">    linenos = models.BooleanField(default=False)</span><br><span class="line">    language = models.CharField(choices=LANGUAGE_CHOICES, default=&apos;python&apos;, max_length=100)</span><br><span class="line">    style = models.CharField(choices=STYLE_CHOICES, default=&apos;friendly&apos;, max_length=100)</span><br></pre></td></tr></table></figure>
+
+<p>這邊的 Class 有些類似一般資料庫的 Table 的韻味，至於相關型別規劃則繼承自 Django 的 Model 模組，然而在 Serializer 這邊則是引用 REST Framework 的 serializers。範例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class SnippetSerializer(serializers.Serializer):</span><br><span class="line">    id = serializers.IntegerField(read_only=True)</span><br><span class="line">    title = serializers.CharField(required=False, allow_blank=True, max_length=100)</span><br><span class="line">    code = serializers.CharField(style=&#123;&apos;base_template&apos;: &apos;textarea.html&apos;&#125;)</span><br><span class="line">    linenos = serializers.BooleanField(required=False)</span><br><span class="line">    language = serializers.ChoiceField(choices=LANGUAGE_CHOICES, default=&apos;python&apos;)</span><br><span class="line">    style = serializers.ChoiceField(choices=STYLE_CHOICES, default=&apos;friendly&apos;)</span><br></pre></td></tr></table></figure>
+
+<p>除了 import 的來源不同以外，可以使用的基本型別也變多了。大家所好奇的是，如果僅僅型別差異，又為何需要使用這些東西，這些其實也都能從最基本型別中自造出來。最主要的差別在於，透過如此型別規劃，可以避免掉自己解析客戶端送來的原始資料，用少量的 code 做完同樣的事，同時往後的增刪改查等動作也能直接複寫既有的方法進行處理。如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">def create(self, validated_data):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Create and return a new `Snippet` instance, given the validated data.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    return Snippet.objects.create(**validated_data)</span><br><span class="line"></span><br><span class="line">def update(self, instance, validated_data):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Update and return an existing `Snippet` instance, given the validated data.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    instance.title = validated_data.get(&apos;title&apos;, instance.title)</span><br><span class="line">    instance.code = validated_data.get(&apos;code&apos;, instance.code)</span><br><span class="line">    instance.linenos = validated_data.get(&apos;linenos&apos;, instance.linenos)</span><br><span class="line">    instance.language = validated_data.get(&apos;language&apos;, instance.language)</span><br><span class="line">    instance.style = validated_data.get(&apos;style&apos;, instance.style)</span><br><span class="line">    instance.save()</span><br><span class="line">    return instance</span><br></pre></td></tr></table></figure>
+
+<h3 id="Viewset"><a href="#Viewset" class="headerlink" title="Viewset"></a>Viewset</h3><p>其實 Viewset 就有提供剛剛說的功能，但是不提供與 Request 相近的方法，如 GET，POST，但還是有 list retrieve create 等較進階作法，不過因為是 Class-based View，所以只要繼承原先設計好的 viewsetd.ViewSet，再覆寫，就可使用。相關案例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib.auth.models import User</span><br><span class="line">from django.shortcuts import get_object_or_404</span><br><span class="line">from myapps.serializers import UserSerializer</span><br><span class="line">from rest_framework import viewsets</span><br><span class="line">from rest_framework.response import Response</span><br><span class="line"></span><br><span class="line">class UserViewSet(viewsets.ViewSet):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    A simple ViewSet for listing or retrieving users.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    def list(self, request):</span><br><span class="line">        queryset = User.objects.all()</span><br><span class="line">        serializer = UserSerializer(queryset, many=True)</span><br><span class="line">        return Response(serializer.data)</span><br><span class="line"></span><br><span class="line">    def retrieve(self, request, pk=None):</span><br><span class="line">        queryset = User.objects.all()</span><br><span class="line">        user = get_object_or_404(queryset, pk=pk)</span><br><span class="line">        serializer = UserSerializer(user)</span><br><span class="line">        return Response(serializer.data)</span><br></pre></td></tr></table></figure>
+
+<p>後頭再把這兩個 View 區分，連到 Router 部分，即可完成簡易設定，而這就等同於用原有 View 的概念完成相關設定。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>比如說 Filter 就是提供條件篩選的方式提取資料，如果沒有 Framework，可能會需要針對不同情況進行解析及邏輯處理，只要多一種狀況可能性就會多出許多需要處理的 Filter，套用 Framework，讓你避免不必要的做事內容。</p>
+<p>Thortting 能輕鬆做出限制單位時間的流量或連線數，這如果是進行商業模式會是受限於主機成本，都能有效控管，使部署應用時，變得比較方便。</p>
+<p>Paginaton 則是在提供再提取資料時，若一次筆數過多，必須提供分段提取，而客戶端所收到的內容大致會有該次最大筆提取內容，以及下次提取內容時的 URL 或是 Token/Tag (依設計而定)，在下一次提取時，會有上一次及下一次的連結。如果不知道具體行為如何，可以去玩玩看 Facebook 的 Graph API，提取自己的動態時報資料，就能理解了。以 JSON 格式來看，大致如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	status:200,</span><br><span class="line">	content:[</span><br><span class="line">		&#123;...&#125;,</span><br><span class="line">		&#123;...&#125;,</span><br><span class="line">		...</span><br><span class="line">		&#123;...&#125;</span><br><span class="line">	],</span><br><span class="line">	link:&#123;</span><br><span class="line">		next_page:'http://example.com/page?tag=jfksdlfjlskdjflskdjfklsdj'</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="小記"><a href="#小記" class="headerlink" title="小記"></a>小記</h2><p>其實這塊也是初次碰觸，如果之後對某些套件有更深的體悟時，或許會有針對某些套件的心得。最後當然老話一句，如果有任何想法，歡迎糾錯、切磋。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/" data-id="ck0g5rlo50000bov3hgs2899s" class="article-share-link">Share</a>
+      
+        <a href="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/實習/">實習</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/07/03/intern-day0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">實習生活 Day0</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/實習/">實習</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/實習/" style="font-size: 20px;">實習</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/07/13/Django-rest-framework/">Django 與 REST API 碰撞的火花</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/03/intern-day0/">實習生活 Day0</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/29/titan-intern-interview/">【實習】新加坡商鈦坦科技面試</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/26/what-is-lex/">Lex 超新手入門</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 YOGA / Jia-wei Yu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'think-and-code';
+  
+  var disqus_url = 'http://blog.yo-ga.space/2017/07/13/Django-rest-framework/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Think and Code</title>
+  
+  <subtitle>Yoga&#39;s space</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://blog.yo-ga.space/"/>
+  <updated>2019-09-12T03:53:16.297Z</updated>
+  <id>http://blog.yo-ga.space/</id>
+  
+  <author>
+    <name>YOGA / Jia-wei Yu</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Django 與 REST API 碰撞的火花</title>
+    <link href="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/"/>
+    <id>http://blog.yo-ga.space/2017/07/13/Django-rest-framework/</id>
+    <published>2017-07-13T14:55:39.000Z</published>
+    <updated>2019-09-12T03:53:16.297Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！&lt;/p&gt;
+&lt;h2 id=&quot;REST-API&quot;&gt;&lt;a href=&quot;#REST-API&quot; class=&quot;headerlink&quot; title=&quot;REST API&quot;&gt;&lt;/a&gt;REST API&lt;/h2&gt;&lt;p&gt;先來說說 REST API，有關詳細解釋可以參考維基百科的&lt;a href=&quot;https://zh.wikipedia.org/zh-tw/REST&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;說明頁面&lt;/a&gt;。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。&lt;/p&gt;
+&lt;p&gt;主要提出四點：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給客戶端對資源進行操作的管道。&lt;/li&gt;
+&lt;li&gt;連接協議具有無狀態性：
+    
+    </summary>
+    
+    
+      <category term="實習" scheme="http://blog.yo-ga.space/tags/%E5%AF%A6%E7%BF%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>實習生活 Day0</title>
+    <link href="http://blog.yo-ga.space/2017/07/03/intern-day0/"/>
+    <id>http://blog.yo-ga.space/2017/07/03/intern-day0/</id>
+    <published>2017-07-03T23:52:29.000Z</published>
+    <updated>2019-09-12T03:53:16.297Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;明天就要開始實習，而今天則先去處理工作的相關雜務，以便準備明天報到項目。這篇就銀行的開戶和整個面試過程說明，以便之後自我參考。&lt;/p&gt;
+&lt;h2 id=&quot;銀行開戶之薪資轉帳戶&quot;&gt;&lt;a href=&quot;#銀行開戶之薪資轉帳戶&quot; class=&quot;headerlink&quot; title=&quot;銀
+      
+    
+    </summary>
+    
+    
+      <category term="實習" scheme="http://blog.yo-ga.space/tags/%E5%AF%A6%E7%BF%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【實習】新加坡商鈦坦科技面試</title>
+    <link href="http://blog.yo-ga.space/2017/04/29/titan-intern-interview/"/>
+    <id>http://blog.yo-ga.space/2017/04/29/titan-intern-interview/</id>
+    <published>2017-04-29T13:39:22.000Z</published>
+    <updated>2019-09-12T03:53:16.297Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;這篇是實習文的第一篇，之後如果有其他面試也會跟上。廢話不多說，直接進行吧。&lt;br&gt;這篇的主題是新加坡商鈦坦科技，也算是今年第一家正式面試的公司。&lt;/p&gt;
+&lt;h2 id=&quot;實習關卡簡介&quot;&gt;&lt;a href=&quot;#實習關卡簡介&quot; class=&quot;headerlink&quot; title=&quot;實習關卡簡介&quot;&gt;&lt;/a&gt;實習關卡簡介&lt;/h2&gt;&lt;p&gt;簡單來說，分成前後兩階段，第一階段為書面審查，第二階段為實體面試。&lt;/p&gt;
+&lt;h2 id=&quot;書面審查&quot;&gt;&lt;a href=&quot;#書面審查&quot; class=&quot;headerlink&quot; title=&quot;書面審查&quot;&gt;&lt;/a&gt;書面審查&lt;/h2&gt;&lt;p&gt;書面審查有別於一般公司投放自行設計的履歷自傳，是統一格式填寫，並要求附上學年成績表。基本上是一個蘿蔔一個坑，沒甚麼花俏，基本資料、拿手學科、使用語言、社團經歷、專案經驗，
+    
+    </summary>
+    
+    
+      <category term="實習" scheme="http://blog.yo-ga.space/tags/%E5%AF%A6%E7%BF%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Lex 超新手入門</title>
+    <link href="http://blog.yo-ga.space/2017/04/26/what-is-lex/"/>
+    <id>http://blog.yo-ga.space/2017/04/26/what-is-lex/</id>
+    <published>2017-04-26T01:30:43.000Z</published>
+    <updated>2019-09-12T03:53:16.297Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;因為系上 Compiler 課程上到 Lex &amp;amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="compiler" scheme="http://blog.yo-ga.space/tags/compiler/"/>
+    
+  </entry>
+  
+</feed>
