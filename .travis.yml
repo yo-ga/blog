@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "6"
+cache:
+  directories:
+    - node_modules
+before_script:
+  - git clone --branch master https://github.com/yo-ga/blog public
+script:
+  - npm run build
+after_success:
+  - cd public
+  - git config user.name "Yoga Yu" 
+  - git config user.email "yoga.yu.169@gmail.com"
+  - git add --all .
+  - git commit -m "[Auto]New Post Deploy"
+  - git push https://$DEPLOY_TOKEN@github.com/yo-ga/blog.git master
+branches:
+  only:
+    - raw
