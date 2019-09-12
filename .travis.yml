@@ -12,6 +12,7 @@ script:
   - hexo g
 after_success:
   - cd public
+  - cp ../README.md .
   - git config user.name "Yoga Yu" 
   - git config user.email "yoga.yu.169@gmail.com"
   - git add --all .
