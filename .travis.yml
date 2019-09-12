@@ -7,7 +7,9 @@ cache:
 before_script:
   - git clone --branch master https://github.com/yo-ga/blog public
 script:
-  - npm run build
+  - npm install -g hexo-cli
+  - npm install
+  - hexo g
 after_success:
   - cd public
   - git config user.name "Yoga Yu" 
