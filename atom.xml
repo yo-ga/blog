@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.yo-ga.space/"/>
-  <updated>2019-09-12T04:04:13.278Z</updated>
+  <updated>2019-09-12T07:55:48.500Z</updated>
   <id>http://blog.yo-ga.space/</id>
   
   <author>
@@ -17,11 +17,33 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Gerrit 及多人協作的好姿勢</title>
+    <link href="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/"/>
+    <id>http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/</id>
+    <published>2019-09-12T12:05:14.000Z</published>
+    <updated>2019-09-12T07:55:48.500Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;因為工作關係，面對及使用 Gerrit 將近一年。然而最近因部門內大家都開始集中開發，並提交到同一個 Repository，開始面對到一些因不良習慣產生的問題，並奔波於同事之間解決問題。今天這邊就簡單介紹一下 Gerrit 是什麼，以及在這種環境底下對初學者來說該如何妥善操作。
+    
+    </summary>
+    
+    
+      <category term="git" scheme="http://blog.yo-ga.space/tags/git/"/>
+    
+      <category term="gerrit" scheme="http://blog.yo-ga.space/tags/gerrit/"/>
+    
+      <category term="develop" scheme="http://blog.yo-ga.space/tags/develop/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Django 與 REST API 碰撞的火花</title>
     <link href="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/"/>
     <id>http://blog.yo-ga.space/2017/07/13/Django-rest-framework/</id>
     <published>2017-07-13T14:55:39.000Z</published>
-    <updated>2019-09-12T04:04:13.278Z</updated>
+    <updated>2019-09-12T07:55:48.500Z</updated>
     
     <summary type="html">
     
@@ -44,7 +66,7 @@
     <link href="http://blog.yo-ga.space/2017/07/03/intern-day0/"/>
     <id>http://blog.yo-ga.space/2017/07/03/intern-day0/</id>
     <published>2017-07-03T23:52:29.000Z</published>
-    <updated>2019-09-12T04:04:13.278Z</updated>
+    <updated>2019-09-12T07:55:48.500Z</updated>
     
     <summary type="html">
     
@@ -66,7 +88,7 @@
     <link href="http://blog.yo-ga.space/2017/04/29/titan-intern-interview/"/>
     <id>http://blog.yo-ga.space/2017/04/29/titan-intern-interview/</id>
     <published>2017-04-29T13:39:22.000Z</published>
-    <updated>2019-09-12T04:04:13.278Z</updated>
+    <updated>2019-09-12T07:55:48.500Z</updated>
     
     <summary type="html">
     
@@ -86,7 +108,7 @@
     <link href="http://blog.yo-ga.space/2017/04/26/what-is-lex/"/>
     <id>http://blog.yo-ga.space/2017/04/26/what-is-lex/</id>
     <published>2017-04-26T01:30:43.000Z</published>
-    <updated>2019-09-12T04:04:13.278Z</updated>
+    <updated>2019-09-12T07:55:48.500Z</updated>
     
     <summary type="html">
     

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+  <title>Gerrit 及多人協作的好姿勢 | Think and Code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="因為工作關係，面對及使用 Gerrit 將近一年。然而最近因部門內大家都開始集中開發，並提交到同一個 Repository，開始面對到一些因不良習慣產生的問題，並奔波於同事之間解決問題。今天這邊就簡單介紹一下 Gerrit 是什麼，以及在這種環境底下對初學者來說該如何妥善操作。">
+<meta name="keywords" content="git,gerrit,develop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gerrit 及多人協作的好姿勢">
+<meta property="og:url" content="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/index.html">
+<meta property="og:site_name" content="Think and Code">
+<meta property="og:description" content="因為工作關係，面對及使用 Gerrit 將近一年。然而最近因部門內大家都開始集中開發，並提交到同一個 Repository，開始面對到一些因不良習慣產生的問題，並奔波於同事之間解決問題。今天這邊就簡單介紹一下 Gerrit 是什麼，以及在這種環境底下對初學者來說該如何妥善操作。">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2019-09-12T07:55:48.500Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gerrit 及多人協作的好姿勢">
+<meta name="twitter:description" content="因為工作關係，面對及使用 Gerrit 將近一年。然而最近因部門內大家都開始集中開發，並提交到同一個 Repository，開始面對到一些因不良習慣產生的問題，並奔波於同事之間解決問題。今天這邊就簡單介紹一下 Gerrit 是什麼，以及在這種環境底下對初學者來說該如何妥善操作。">
+  
+    <link rel="alternate" href="/atom.xml" title="Think and Code" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-75587504-3', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75587504-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Think and Code</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Yoga&#39;s space</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.yo-ga.space"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-gerrit-hint-point" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/12/gerrit-hint-point/" class="article-date">
+  <time datetime="2019-09-12T12:05:14.000Z" itemprop="datePublished">2019-09-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Gerrit 及多人協作的好姿勢
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>因為工作關係，面對及使用 Gerrit 將近一年。然而最近因部門內大家都開始集中開發，並提交到同一個 Repository，開始面對到一些因不良習慣產生的問題，並奔波於同事之間解決問題。今天這邊就簡單介紹一下 Gerrit 是什麼，以及在這種環境底下對初學者來說該如何妥善操作。<a id="more"></a></p>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><p>在講 Gerrit 之前，勢必得先解釋 Git 是什麼。簡單來說，就是一款版本控制軟體，能夠留下更改歷史並方便的選取特定版本，如果稍有經驗的讀者肯定也聽過 SVN，基本上是同類型軟體，只是已逐漸成為歷史眼淚。本篇就不花篇幅教學，僅就會遇到的指令提出說明，畢竟光是講完基本指令及整個操作概念，基本上就能產生出極大篇幅去解釋，而網路資源已經夠多，我暫時不多花心力去談論。</p>
+<p>基於 Git 的使用及搭配，版本倉儲代管服務就順勢產生，各家也都有不同的服務項目及特點，但基本上除了基本將 Git 紀錄及內容提交以外，還會搭配權限控制及審查機制。當然近年來有多款服務或軟體不斷與 CICD 進行整合，讓 SRE、RD、QAE 能更進一步在同意地方就處理完成，而不用在串連多項服務組成完整 Workflow。而現在大家最為熟知的諸如 GitHub、GitLab、Bitbucket，各有各的好，除了工程師自己的 Side Project 外，多半也是看上層的臉色，所以也就不評斷。</p>
+<h2 id="Gerrit"><a href="#Gerrit" class="headerlink" title="Gerrit"></a>Gerrit</h2><p>而 Gerrit 就是這樣一套版本倉儲代管服務軟體，只是他與多數其他軟體有許多奇妙的機制，底下一一說明。</p>
+<p>嚴格來說，他提供的功能就只有程式碼代管、權限控制、程式碼審查。使用者能從上頭將程式碼下載下來，修改並提交審查，待審查人員審核完畢後將這次修改合進目標分支。如果熟知 GitHub 或 GitLab 的讀者肯定會想說這不就是直接將這次的修改開在不同分支並將分支上傳，並開 PR (Pull Request) 讓對方知道這次改動即可？重點就在這邊。</p>
+<p>首先，Gerrit 除非伺服器端存在該分支，開發者不能直接在本地端建立其他分支並直接上傳。另外 Gerrit 在提交變更時不能直接推到目標分支，而是要推到 <code>refs/for/&lt;Branch Name&gt;</code> 上面等待審查。最後一點 Gerrit 將每次變更叫做 Change，當推上去伺服器時就是提交一次 Change，服務也會自動幫你開好，等同其他服務的 PR。這邊的 Change 也是單止一個 commit，當多個 commit 時視為多個 Change，而非其他服務將 PR 是做一串 commits。既然不能將整個分支上傳上去，那 Gerrit 就要找到其他方式辨識每次不同的 Change，那就是 Change ID。</p>
+<p>那 Change ID 是怎麼產生的呢？Gerrit 在你要 clone project 下來時有個選項，「Clone with commit-msg hook」，從中可以瞧見一點端倪。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> http://&lt;Gerrit IP&gt;/&lt;Project Name&gt; &amp;&amp; (<span class="built_in">cd</span> &lt;Project Name&gt; &amp;&amp; curl -kLo `git rev-parse --git-dir`/hooks/commit-msg http://&lt;Gerrit IP&gt;/tools/hooks/commit-msg; chmod +x `git rev-parse --git-dir`/hooks/commit-msg)</span><br></pre></td></tr></table></figure>
+
+<p>也就是 Gerrit 有一段預先準備好的 script，將會替換掉原先 git commit-msg hook 的 script。然後當你建立新的 commit 時，便會自動在你的 commit massage 底下加上類似 <code>Change-Id: I02b2255dc2342342342342342323424340989233</code> 這樣的內容。當每次上傳時，就用 change ID 確認這是哪次的 Change，而利用該次 change 的 parent commit ID 辨識你要跟在哪個 commit 後面。所以就算你這次的 Commit ID 變了，只要是同一個 Change ID，你就會更改到同一個 Change。因為如此，當你的變更受到退回需要更改時，只要將檔案更改完後，將檔案 git add 加進紀錄，並執行 <code>git commit --amend</code> 並 push 到 <code>refs/for/&lt;Branch Name&gt;</code> 就成功了。</p>
+<h2 id="眉角"><a href="#眉角" class="headerlink" title="眉角"></a>眉角</h2><p>多人密集協作底下，基本上都是並行開發，也就是說一開始你是跟在 commit 1 後面，在你開發完後，可能早就有其他人提交 commit，伺服器上分支都已經到 commit 4 或 5，在這種情況下很容易出現 Conflict 狀況。對初學者而言，會因 Gerrit 不用上傳 Branch，而在本機上就直接在 master branch 上進行處理。一旦發生 Conflict，本機上又得折騰一番才能處理衝突。下面講一下我的習慣，當然沒有所謂的好壞，但能有效避免不必要的麻煩。另外也適用於其他 Service，只是將 master 代換成各自開發源頭分支，及部分步驟參考著用。</p>
+<p>首先假定遠端分支名稱是 master，而在本機端的 master 分支我就保持乾淨狀況，不在上面進行修改，當有需要開發時就按底下步驟操作。</p>
+<ol>
+<li><code>git checkout master</code>: 先回到 master branch</li>
+<li><code>git pull origin master</code>: 更新至伺服器端上最新的 code，因沒有任何編輯，故分支路線就順順成長下去，不可能有衝突。</li>
+<li><code>git checkout -b new_branch_name</code>: 這時你會從本機上複製出一個分支，並將跳到該分支上，之後新 commit 也會在這支上面。</li>
+<li>進行開發並將新檔案 <code>git add</code></li>
+<li><code>git commit -m &quot;Commit 1&quot;</code>: 加上 commit 並建立新 Change ID。</li>
+<li><code>git checkout master</code>: 回到 master 分支。</li>
+<li><code>git pull origin master</code>: 拉新的程式碼回來。</li>
+<li><code>git checkout new_branch_name</code>: 回到要提交的分支。</li>
+<li><code>git rebase master</code>: 最為關鍵的一步，將要提交的 commit 剪下並貼到最新的 commit 後面。</li>
+<li>當有衝突時，先將衝突整理完後 <code>git add</code> 檔案，再 <code>git rebase --continue</code></li>
+<li><code>git push orgin new_branch_name:refs/for/master</code>: 最後提交 change</li>
+</ol>
+<p>雖然步驟很多，但相比於直接在 master 上改而發生紀錄有落差，進而發生衝突，版本回復處理又擔心原本改動不見還要好。另外的好處就是當審查者被眾多待審查的更動塞住後，你也可以先開新分支繼續做下一個改動，如果最後要取消，就直接將不要的內容加進去，並把分支刪除就乾乾淨淨。</p>
+<h2 id="碎語"><a href="#碎語" class="headerlink" title="碎語"></a>碎語</h2><p>如果如果是你進去時大家都在用 Gerrit，並且暫時不會更改服務軟體，那就乖乖繼續使用吧。如果有考慮其他種軟體時，最好還是選擇其他如 GitLab 或 BitBucket 之類的軟體。一來最新手使用習慣會有比較好的建立，二來對開發者也能在本機端將一次的項目拆成多個 Commit，當每個小功能做壞時，也能在本機擁有版本控制的優勢，直接 reset 或 revert。以上就是目前使用的想法，就給大家參考了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/" data-id="ck0gefiuk0002borl5hmwm8jz" class="article-share-link">Share</a>
+      
+        <a href="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/develop/">develop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gerrit/">gerrit</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/07/13/Django-rest-framework/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Django 與 REST API 碰撞的火花</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/">develop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/實習/">實習</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/develop/" style="font-size: 10px;">develop</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/實習/" style="font-size: 20px;">實習</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/09/12/gerrit-hint-point/">Gerrit 及多人協作的好姿勢</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/13/Django-rest-framework/">Django 與 REST API 碰撞的火花</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/03/intern-day0/">實習生活 Day0</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/29/titan-intern-interview/">【實習】新加坡商鈦坦科技面試</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/26/what-is-lex/">Lex 超新手入門</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 YOGA / Jia-wei Yu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'think-and-code';
+  
+  var disqus_url = 'http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
