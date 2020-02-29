@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - raw
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - name: Pull master resource
+      run: git clone --branch master https://github.com/yo-ga/blog public
+    - name: Setup node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '6.x'
+    - name: Install node
+      run: |
+        npm install -g hexo-cli
+        npm install
+        hexo g
+    - name: Upload to GitHub
+      run: |
+        cd public
+        cp ../README.md .
+        git config user.name "Yoga Yu" 
+        git config user.email "yoga.yu.169@gmail.com"
+        git add --all .
+        git commit -m "[Auto]New Post Deploy"
+        git push https://${ secret.GITHUB_TOKEN }@github.com/yo-ga/blog.git master
