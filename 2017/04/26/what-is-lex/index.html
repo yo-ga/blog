@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="utf-8">
   
   <title>Lex 超新手入門 | Think and Code</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="因為系上 Compiler 課程上到 Lex &amp;amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！">
-<meta name="keywords" content="compiler">
+  <meta name="description" content="因為系上 Compiler 課程上到 Lex &amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Lex 超新手入門">
 <meta property="og:url" content="http://blog.yo-ga.space/2017/04/26/what-is-lex/index.html">
 <meta property="og:site_name" content="Think and Code">
-<meta property="og:description" content="因為系上 Compiler 課程上到 Lex &amp;amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2020-11-25T04:28:20.763Z">
+<meta property="og:description" content="因為系上 Compiler 課程上到 Lex &amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2017-04-26T01:30:43.000Z">
+<meta property="article:modified_time" content="2020-12-13T23:38:40.681Z">
+<meta property="article:author" content="YOGA &#x2F; Jia-wei Yu">
+<meta property="article:tag" content="compiler">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lex 超新手入門">
-<meta name="twitter:description" content="因為系上 Compiler 課程上到 Lex &amp;amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！">
   
     <link rel="alternate" href="/atom.xml" title="Think and Code" type="application/atom+xml">
   
@@ -26,7 +26,9 @@
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   
 <!-- Google Analytics -->
 <script type="text/javascript">
@@ -52,8 +54,8 @@ ga('send', 'pageview');
 
 </script>
   <script data-ad-client="ca-pub-8158220837725676" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
 <body>
   <div id="container">
     <div id="wrap">
@@ -64,10 +66,6 @@ ga('send', 'pageview');
       <h1 id="logo-wrap">
         <a href="/" id="logo">Think and Code</a>
       </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Yoga&#39;s space</a>
-        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -165,41 +163,36 @@ ga('send', 'pageview');
 <td align="left"></td>
 </tr>
 </tbody></table>
-<p>其實還有一些進階而且強大的功能沒有講到，如果有興趣或需要者可以留言，我再回應或增加。<br>同時在這邊提供一些檢測是否選取成功的線上工具。<br>regular expressions 101: <a href="https://regex101.com/" target="_blank" rel="noopener">https://regex101.com/</a><br>RegExr : <a href="http://regexr.com/" target="_blank" rel="noopener">http://regexr.com/</a></p>
+<p>其實還有一些進階而且強大的功能沒有講到，如果有興趣或需要者可以留言，我再回應或增加。<br>同時在這邊提供一些檢測是否選取成功的線上工具。<br>regular expressions 101: <a target="_blank" rel="noopener" href="https://regex101.com/">https://regex101.com/</a><br>RegExr : <a target="_blank" rel="noopener" href="http://regexr.com/">http://regexr.com/</a></p>
 <h2 id="Lex"><a href="#Lex" class="headerlink" title="Lex"></a>Lex</h2><p>基本上，Lex 可先分為三大區塊，各大區塊以 <code>%%</code> 分開，分別是 <em>definition</em>、<em>rule</em>、<em>user subroutines</em>。<br>在程式中所呈現的方式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	definition</span><br><span class="line">%%</span><br><span class="line">	rule</span><br><span class="line">%%</span><br><span class="line">	user subroutines</span><br></pre></td></tr></table></figure>
-
 <p>接下來分各部分介紹。</p>
 <h3 id="Definition-Section"><a href="#Definition-Section" class="headerlink" title="Definition Section"></a>Definition Section</h3><p>這部分主要是以宣告替換字詞或 C code 為主，但有一些注意事項：</p>
 <ol>
-<li>C code 是用來宣告變數或是 include 非基本 C Header File，並且需要以 <code>%{</code> 和 <code>%}</code> 包起來</li>
-<li>其他替代字詞需要在 <code>%{</code><code>%}</code> 外面宣告</li>
+<li>C code 是用來宣告變數或是 include 非基本 C Header File，並且需要以 <code>%&#123;</code> 和 <code>%&#125;</code> 包起來</li>
+<li>其他替代字詞需要在 <code>%&#123;</code><code>%&#125;</code> 外面宣告</li>
 <li>在替代字詞有分成兩塊，一部分是需替代的字詞，一部份是替換後字詞，兩個之間要用多個空白分開</li>
-<li>還有一些比較神奇的做法，一個替換一個，用組合的方式處理<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">	#include&lt;string.h&gt;</span><br><span class="line">	/*</span><br><span class="line">		You don&apos;t have to include stdlib.h</span><br><span class="line">	*/</span><br><span class="line">%&#125;</span><br><span class="line">num  ([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])</span><br><span class="line">dot  \.</span><br><span class="line">ip  &#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;</span><br><span class="line">%%</span><br><span class="line">...</span><br><span class="line">%%</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<li>還有一些比較神奇的做法，一個替換一個，用組合的方式處理<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">	#include&lt;string.h&gt;</span><br><span class="line">	&#x2F;*</span><br><span class="line">		You don&#39;t have to include stdlib.h</span><br><span class="line">	*&#x2F;</span><br><span class="line">%&#125;</span><br><span class="line">num  ([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])</span><br><span class="line">dot  \.</span><br><span class="line">ip  &#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;</span><br><span class="line">%%</span><br><span class="line">...</span><br><span class="line">%%</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>
 <h3 id="Rule-Section"><a href="#Rule-Section" class="headerlink" title="Rule Section"></a>Rule Section</h3><p>這部分主要在設定 RE 與相對應動作的部分，當然也可以透過前面定義好的東西進行代換，建議是將 token 設得較小，避免篩不到想要的字詞。在輸出方面，常見當然是把剛剛選取完的字詞進行輸出，而方法有二，ECHO 和 yytext。<br>其實 yytext 就是一個 string buffer 儲存目前所篩出來的字詞，而 ECHO 就把 printf 一同包進去了，但是請注意，僅限目前字詞，若目前字詞沒有換行，他們就不會換行喔！<br>轉換成 code 來說，就是 <code>ECHO;</code> 相等於 <code>printf("%s",yytext);</code><br>最後幾點提醒：</p>
 <ol>
 <li>RE 與相對應動作的 code 之間需用<strong>兩個以上</strong>的空格分開。</li>
-<li>相對應動作的 code 需用 <code>{}</code> 包起來，除非無動作，才可以以 <code>{;}</code> 或 <code>;</code> 表示</li>
-<li>C code 結束要以<code>;</code>結尾！要以<code>;</code>結尾！要以<code>;</code>結尾！<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">	#include&lt;string.h&gt;</span><br><span class="line">	/*</span><br><span class="line">		You don&apos;t have to include stdlib.h</span><br><span class="line">	*/</span><br><span class="line">&#125;%</span><br><span class="line">num  ([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])</span><br><span class="line">dot  \.</span><br><span class="line">ip  &#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;</span><br><span class="line">%%</span><br><span class="line">&#123;ip&#125;  &#123;printf(&quot;%s\n&quot;,yytext);&#125;</span><br><span class="line">\n  ;</span><br><span class="line">.   ;</span><br><span class="line">%%</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<li>相對應動作的 code 需用 <code>&#123;&#125;</code> 包起來，除非無動作，才可以以 <code>&#123;;&#125;</code> 或 <code>;</code> 表示</li>
+<li>C code 結束要以<code>;</code>結尾！要以<code>;</code>結尾！要以<code>;</code>結尾！<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">%&#123;</span><br><span class="line">	#include&lt;string.h&gt;</span><br><span class="line">	&#x2F;*</span><br><span class="line">		You don&#39;t have to include stdlib.h</span><br><span class="line">	*&#x2F;</span><br><span class="line">&#125;%</span><br><span class="line">num  ([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])</span><br><span class="line">dot  \.</span><br><span class="line">ip  &#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;&#123;dot&#125;&#123;num&#125;</span><br><span class="line">%%</span><br><span class="line">&#123;ip&#125;  &#123;printf(&quot;%s\n&quot;,yytext);&#125;</span><br><span class="line">\n  ;</span><br><span class="line">.   ;</span><br><span class="line">%%</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>
 <h3 id="User-Subroutines-Section"><a href="#User-Subroutines-Section" class="headerlink" title="User Subroutines Section"></a>User Subroutines Section</h3><p>簡單來說就是 Main Function 啦！如果你前兩個 section 處理得不錯，那代表這裡只需要用最單純的部分，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	yylex();</span><br><span class="line">	return(0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>但其實 Lex 還是有提供 yywrap() 的 function 自定義，只是究竟該如何使用還沒搞清楚，如果搞清楚了再告訴各位。</p>
 <h2 id="Lex-編譯-amp-執行"><a href="#Lex-編譯-amp-執行" class="headerlink" title="Lex 編譯 &amp; 執行"></a>Lex 編譯 &amp; 執行</h2><p>這邊先假設大家都是在 Unix 的環境下，已經有 gcc 及 flex，可以進行處理，如果還沒，請左轉出去問問 Google 大神。<br>我的習慣會準備一個輸入檔，接著假設你的 Lex file 是 test.l，輸入檔是 input.txt。<br>開啟命令列，打入</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flex test.l</span><br></pre></td></tr></table></figure>
-
 <p>接著輸入</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc yy.lex.c -o <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
-
 <p>目錄底下就會有一個叫做 test 的執行檔了。<br>接下來把輸入檔餵進去，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./<span class="built_in">test</span> &lt; input.txt</span><br></pre></td></tr></table></figure>
-
 <p>Terminal 上應該就可以看到有相對應結果顯示。</p>
 <p>這篇也先到這裡，如果有問題歡迎發問喔！或是有誤也歡迎更正！</p>
 <h2 id="參考書目"><a href="#參考書目" class="headerlink" title="參考書目"></a>參考書目</h2><p>lex &amp; yacc, O’REILLY, 2000</p>
@@ -207,12 +200,12 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.yo-ga.space/2017/04/26/what-is-lex/" data-id="ckhwwrb6y0006b7tb8zdcpl6b" class="article-share-link">Share</a>
+      <a data-url="http://blog.yo-ga.space/2017/04/26/what-is-lex/" data-id="ckinrs26c0006dfnjh2yi8jnk" class="article-share-link">Share</a>
       
         <a href="http://blog.yo-ga.space/2017/04/26/what-is-lex/#disqus_thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/">compiler</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/compiler/" rel="tag">compiler</a></li></ul>
 
     </footer>
   </div>
@@ -238,7 +231,7 @@ ga('send', 'pageview');
 
 <section id="comments">
   <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   </div>
 </section>
 </section>
@@ -252,7 +245,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/">develop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/實習/">實習</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/" rel="tag">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/" rel="tag">develop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/" rel="tag">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%A6%E7%BF%92/" rel="tag">實習</a></li></ul>
     </div>
   </div>
 
@@ -262,7 +255,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/develop/" style="font-size: 10px;">develop</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/實習/" style="font-size: 20px;">實習</a>
+      <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/develop/" style="font-size: 10px;">develop</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/%E5%AF%A6%E7%BF%92/" style="font-size: 20px;">實習</a>
     </div>
   </div>
 
@@ -347,11 +340,17 @@ ga('send', 'pageview');
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
 
   </div>
 </body>

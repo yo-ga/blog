@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.yo-ga.space/"/>
-  <updated>2020-11-25T04:28:20.763Z</updated>
+  <updated>2020-12-13T23:38:40.681Z</updated>
   <id>http://blog.yo-ga.space/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/"/>
     <id>http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/</id>
     <published>2019-09-12T12:05:14.000Z</published>
-    <updated>2020-11-25T04:28:20.763Z</updated>
+    <updated>2020-12-13T23:38:40.681Z</updated>
     
     <summary type="html">
     
@@ -43,12 +43,12 @@
     <link href="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/"/>
     <id>http://blog.yo-ga.space/2017/07/13/Django-rest-framework/</id>
     <published>2017-07-13T14:55:39.000Z</published>
-    <updated>2020-11-25T04:28:20.763Z</updated>
+    <updated>2020-12-13T23:38:40.681Z</updated>
     
     <summary type="html">
     
       &lt;p&gt;剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！&lt;/p&gt;
-&lt;h2 id=&quot;REST-API&quot;&gt;&lt;a href=&quot;#REST-API&quot; class=&quot;headerlink&quot; title=&quot;REST API&quot;&gt;&lt;/a&gt;REST API&lt;/h2&gt;&lt;p&gt;先來說說 REST API，有關詳細解釋可以參考維基百科的&lt;a href=&quot;https://zh.wikipedia.org/zh-tw/REST&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;說明頁面&lt;/a&gt;。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。&lt;/p&gt;
+&lt;h2 id=&quot;REST-API&quot;&gt;&lt;a href=&quot;#REST-API&quot; class=&quot;headerlink&quot; title=&quot;REST API&quot;&gt;&lt;/a&gt;REST API&lt;/h2&gt;&lt;p&gt;先來說說 REST API，有關詳細解釋可以參考維基百科的&lt;a href=&quot;https://zh.wikipedia.org/zh-tw/REST&quot;&gt;說明頁面&lt;/a&gt;。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。&lt;/p&gt;
 &lt;p&gt;主要提出四點：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給客戶端對資源進行操作的管道。&lt;/li&gt;
@@ -66,7 +66,7 @@
     <link href="http://blog.yo-ga.space/2017/07/03/intern-day0/"/>
     <id>http://blog.yo-ga.space/2017/07/03/intern-day0/</id>
     <published>2017-07-03T23:52:29.000Z</published>
-    <updated>2020-11-25T04:28:20.763Z</updated>
+    <updated>2020-12-13T23:38:40.681Z</updated>
     
     <summary type="html">
     
@@ -88,7 +88,7 @@
     <link href="http://blog.yo-ga.space/2017/04/29/titan-intern-interview/"/>
     <id>http://blog.yo-ga.space/2017/04/29/titan-intern-interview/</id>
     <published>2017-04-29T13:39:22.000Z</published>
-    <updated>2020-11-25T04:28:20.763Z</updated>
+    <updated>2020-12-13T23:38:40.681Z</updated>
     
     <summary type="html">
     
@@ -108,7 +108,7 @@
     <link href="http://blog.yo-ga.space/2017/04/26/what-is-lex/"/>
     <id>http://blog.yo-ga.space/2017/04/26/what-is-lex/</id>
     <published>2017-04-26T01:30:43.000Z</published>
-    <updated>2020-11-25T04:28:20.763Z</updated>
+    <updated>2020-12-13T23:38:40.681Z</updated>
     
     <summary type="html">
     
