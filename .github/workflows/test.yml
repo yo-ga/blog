@@ -1,11 +1,11 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Testing
 
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the raw branch
-  push:
+  pull_request:
     branches: [ raw ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -41,11 +41,3 @@ jobs:
           npm install -g hexo-cli
           npm install
           hexo g
-      - run: |
-          cd public
-          cp ../README.md .
-          git config user.name "Yoga Yu" 
-          git config user.email "yoga.yu.169@gmail.com"
-          git add --all .
-          git commit -m "[GitHub Actions] New Post Deploy"
-          git push
