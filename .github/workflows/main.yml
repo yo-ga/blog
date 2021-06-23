@@ -34,6 +34,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
+          ref: raw
+      - uses: actions/checkout@v2
+        with:
           ref: master
           path: public
       - run: |
