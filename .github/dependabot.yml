@@ -1,0 +1,9 @@
+version: 2
+uopdates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interveal: "daily"
+    target-branch: "raw"
+    labels:
+      - "npm dependencies"
