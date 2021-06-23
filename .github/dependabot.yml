@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interveal: "daily"
+      interval: "daily"
     target-branch: "raw"
     labels:
       - "npm dependencies"
