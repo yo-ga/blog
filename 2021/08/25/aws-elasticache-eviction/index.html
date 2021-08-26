@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>淺談 AWS ElastiCache Redis 資料淘汰機制及相關 Metric | Think and Code</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="這篇主要會談談 Redis 淘汰資料機制會如何觸發對應動作，及 AWS 上相關觀察的 Metric、Parameter Group Value。 前提之所以會需要去了解相關內容的機制，是因為在觀察到目前使用 ElastiCache 的記憶體用量頻頻升高，已有多次峰值超過 80%，所以試圖配合 CloudWatch 其他指標進行評估，確認是否需要更改大小以保環境穩定。然而這些指標之間代表的關係為何，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="淺談 AWS ElastiCache Redis 資料淘汰機制及相關 Metric">
+<meta property="og:url" content="http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/index.html">
+<meta property="og:site_name" content="Think and Code">
+<meta property="og:description" content="這篇主要會談談 Redis 淘汰資料機制會如何觸發對應動作，及 AWS 上相關觀察的 Metric、Parameter Group Value。 前提之所以會需要去了解相關內容的機制，是因為在觀察到目前使用 ElastiCache 的記憶體用量頻頻升高，已有多次峰值超過 80%，所以試圖配合 CloudWatch 其他指標進行評估，確認是否需要更改大小以保環境穩定。然而這些指標之間代表的關係為何，">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-08-25T16:25:39.000Z">
+<meta property="article:modified_time" content="2021-08-26T08:28:13.717Z">
+<meta property="article:author" content="YOGA &#x2F; Jia-wei Yu">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="elasticache">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Think and Code" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-75587504-3', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75587504-3', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  <script data-ad-client="ca-pub-8158220837725676" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Think and Code</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.yo-ga.space"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-aws-elasticache-eviction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2021/08/25/aws-elasticache-eviction/" class="article-date">
+  <time datetime="2021-08-25T16:25:39.000Z" itemprop="datePublished">2021-08-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      淺談 AWS ElastiCache Redis 資料淘汰機制及相關 Metric
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>這篇主要會談談 Redis 淘汰資料機制會如何觸發對應動作，及 AWS 上相關觀察的 Metric、Parameter Group Value。</p>
+<h2 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h2><p>之所以會需要去了解相關內容的機制，是因為在觀察到目前使用 ElastiCache 的記憶體用量頻頻升高，已有多次峰值超過 80%，所以試圖配合 CloudWatch 其他指標進行評估，確認是否需要更改大小以保環境穩定。然而這些指標之間代表的關係為何，跟設定檔的參數間是否相等或是有間接相關，對一個來說初入 AWS 叢林的小白兔來說，一時之間會有點霧煞煞。既然都花時間了解測試，那就整理成一篇筆記吧！<span id="more"></span></p>
+<p>另外先把本篇使用及測試的環境記於文前，避免未來參考時混淆：</p>
+<ul>
+<li>Redis: 4.0.10</li>
+<li>AWS ElastiCache: Cluster mode, cache.t2.micro, 2021.08 建立</li>
+<li>Redis Client: redis-cli 6.2.5, redis-py 3.5.3 (Python 3.8.11)</li>
+</ul>
+<h2 id="Redis-如何淘汰資料"><a href="#Redis-如何淘汰資料" class="headerlink" title="Redis 如何淘汰資料"></a>Redis 如何淘汰資料</h2><p>在 Redis 淘汰資料這塊上，其實主要可以依觸發條件分成在兩種，一個是存活時間，另一個是資料使用量達到資料使用記憶體的最大允許量。</p>
+<h3 id="存活時間-TTL"><a href="#存活時間-TTL" class="headerlink" title="存活時間 (TTL)"></a>存活時間 (TTL)</h3><p>以存活時間來說比較簡單，就是依照存活時間設定，一旦到時限之前都尚未因各種原因刪除淘汰，就淘汰該 key。以下是用 Python 進行 TTL 設定。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta, datetime</span><br><span class="line"><span class="keyword">from</span> redis <span class="keyword">import</span> Redis</span><br><span class="line"></span><br><span class="line">client = Redis(host=<span class="string">&quot;redis.amazonaws.com&quot;</span>, port=<span class="string">&quot;6379&quot;</span>)</span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">&quot;key1&quot;</span>, <span class="string">&quot;data&quot;</span>, ex=timedelta(minutes=<span class="number">15</span>))  <span class="comment"># 15 分鐘後過期</span></span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">&quot;key1&quot;</span>, <span class="string">&quot;data&quot;</span>, ex=<span class="number">15</span>)  <span class="comment"># 15 秒後過期</span></span><br><span class="line"></span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">&quot;key2&quot;</span>, <span class="string">&quot;data2&quot;</span>)  <span class="comment"># 先設定資料不設定 ttl</span></span><br><span class="line">client.expireat(<span class="string">&quot;key2&quot;</span>, <span class="built_in">int</span>(datetime(<span class="number">2022</span>, <span class="number">11</span>, <span class="number">27</span>, <span class="number">21</span>, <span class="number">57</span>, <span class="number">42</span>, <span class="number">100</span>).timestamp()))  <span class="comment"># 設定特定過期時間 timestamp</span></span><br></pre></td></tr></table></figure>
+
+<p>針對過期處理，又可以分被動式 (passive) 跟主動式 (active) 淘汰兩種。被動是指當 client 有去接觸到 key 時，確認是否是否過期，若發現則 time out 掉。然而若照此做法，則可能會有許多需要淘汰掉但未曾使用過的 key 囤積，所以另外得靠 redis 進行處理，處理流程如下，而此流程則維持每秒 10 次的頻率進行。</p>
+<ol>
+<li>從有被標記 TTL 的 key 中抓出 20 個進行測試</li>
+<li>將過期的進行淘汰</li>
+<li>當步驟二淘汰的 key 有多於 5 個則回到步驟一，若無則結束</li>
+</ol>
+<h3 id="達到最大記憶體-maxmemory-使用量"><a href="#達到最大記憶體-maxmemory-使用量" class="headerlink" title="達到最大記憶體 (maxmemory) 使用量"></a>達到最大記憶體 (maxmemory) 使用量</h3><p>講完過期淘汰 (expire) 的機制，則輪到資料達到最大記憶體與許使用量時去除 (evict) 的機制。在 redis 原生的設定檔中，有個 <code>maxmemory</code> 可以去設定 Redis 最多能佔多少記憶體。假設今天不斷塞資料讓 Redis 所佔記憶體容量達到該設定數值，則觸發 eviction 機制，此時會依據 config 中 <code>maxmemory-policy</code> 選用的 policy 進行淘汰，若清出可用的空間後，則將 data 繼續寫入。若盡可能淘汰後仍無法清除足夠空間，則會回傳 OOM (Out Of Memory) 錯誤，不接受存入資料，直到清出空間為止。本文不會特別針對每一種 policy 進行解釋，僅針對預設行為解釋。</p>
+<p>在 Redis 4 下，若為原生手動安裝，default policy 為 <code>noeviction</code>，也就是沒有 eviction 機制，若資料又不巧沒設定過期時限，到填滿那一刻就注定發生 OOM，只能手動刪除資料。至於 AWS ElastiCache Redis 下，設定檔是靠 Parameter Group 進行處理，其中 default group 的 <code>maxmemory-policy</code> 是 <code>volatile-lru</code>。而此 policy 簡單來說就是從有設定 TTL 的 Key 按照 LRU (Less Recently Used) 演算法挑出可能近期不用的 Key 進行淘汰，所以 TTL 的長短反倒不是重點，僅僅作為區分是否需要長期保存的依據。在這個狀況下，必須注意無 TTL 的資料是否會長期成長而無刪除，若有這種狀況，即使有 eviction 機制，也會隨著 Redis 內部沒帶 TTL 資料逐步排擠帶 TTL 資料，最後沒有任何可淘汰的資料進而 OOM。</p>
+<p>另外在手動安裝原生 Redis 狀況下，基本上若需要就會將系統能用的記憶體吃好吃滿，這樣的狀況下，就算 Redis 沒有 OOM，也可能排擠到系統其他程式。公有雲各廠為了必免 Redis 自己完全吃滿，讓其他 snapshot 等執行程式失敗，故多半有類似「保留記憶體」的參數設定。在 AWS 中參數為 <code>reserved-memory-percent</code> 或 <code>reserved-memory</code>，使用哪個視建立的 ElastiCache Redis 時間而定，若在 2017.03.16 之前則是 <code>reserved-memory</code>，反之則是 <code>reserved-memory-percent</code>。在 ElastiCache Redis 4.0 的 default parameter 中，<code>reserved-memory-percent</code> 是 25，所以就是會預留機器 25% 記憶體，以 75% 記憶體容量的作為 Redis 服務的 <code>maxmemory</code>。這點可以建立完 Redis 後，進 Redis 下 <code>INFO memory</code> 拿 <code>maxmemory</code> 的數值跟 default parameter group <code>maxmemory</code> 相除得證。</p>
+<h2 id="服務監測數值"><a href="#服務監測數值" class="headerlink" title="服務監測數值"></a>服務監測數值</h2><p>基本上，講完設定方式後，後續就剩下作為維運團隊需要觀察哪些參數，以了解各項數據的成長趨勢及發生特定事件的時間點。在這邊就主要以 AWS CloudWatch 及 Redis <code>INFO</code> 指令有的參數作為說明對照。</p>
+<h3 id="記憶體相關"><a href="#記憶體相關" class="headerlink" title="記憶體相關"></a>記憶體相關</h3><p>主要會確認用了多少記憶體，還剩下多少可以使用，而 CloudWatch 有 <code>FreeableMemory</code> 可以知道系統還有多少可以使用，也有 <code>DatabaseMemoryUsagePercentage</code> 可以知道所用記憶體的百分比，很多人一開始會以為這兩項是可以直接互通的，然而實際上雖然同樣是記憶體相關，但兩個卻有些不同。<code>FreeableMemory</code> 是指以 Instance 角度來看，有多少空閒記億體可以使用，所以這個參數會包含前面的保留記憶體。<code>DatabaseMemoryUsagePercentage</code> 是在 Redis 中下 <code>INFO</code> 拿 <code>used_memory</code> 除以 <code>maxmemory</code> 所得，而前面有提到這邊的 <code>maxmemory</code> 是扣除保留記憶體的。所以在預設狀況下會出現 <code>DatabaseMemoryUsagePercentage</code> 已經 100%，但 <code>FreeableMemory</code> 仍有 instance 約四分之一的記憶體未使用。</p>
+<p>Redis <code>INFO</code> 中 <code>used_memory</code> 指的是 Redis allocator 所佔用的容量，然而這些 allocator 有一小部分是 Redis 服務本身自帶的，這個容量則被記於 Redis <code>INFO</code> 中的 <code>used_memory_overhead</code> 中。至於 Redis 服務剛起來不屬於 allocator 的則被獨立在 <code>used_memory</code> 外，記於 <code>used_memory_startup</code>。</p>
+<h3 id="Expired-amp-Evicted"><a href="#Expired-amp-Evicted" class="headerlink" title="Expired &amp; Evicted"></a>Expired &amp; Evicted</h3><p>在成功觸發 Eviction policy 淘汰資料時，Redis <code>INFO</code> 中 <code>evicted_keys</code> 會累計，直到重啟 service，然而 CloudWatch 中的 <code>Evictions</code> 則是記錄每個時間點因觸發 Eviction Policy 淘汰的數量。在過期資料下也有同樣狀況，只是 Redis 中換成 <code>expired_keys</code>，CloudWatch 中變成 <code>Reclaimed</code>。</p>
+<h2 id="後記"><a href="#後記" class="headerlink" title="後記"></a>後記</h2><p>這篇算是換工作後重拾 blog，就當作未來工作上的 survey、筆記或備忘錄吧！同時提供給有同樣狀況、需求的<del>未來的自己</del>工程師們一個參考或借鏡。</p>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><p>[1] <a target="_blank" rel="noopener" href="https://redis-py.readthedocs.io/en/stable/">Redis-py Document</a><br>[2] <a target="_blank" rel="noopener" href="https://redis.io/commands/expire#how-redis-expires-keys">How Redis expires keys</a><br>[3] <a target="_blank" rel="noopener" href="https://redis.io/topics/lru-cache">Using Redis as an LRU cache</a><br>[4] <a target="_blank" rel="noopener" href="https://redis.io/commands/INFO#notes">Redis INFO Command</a><br>[5] <a target="_blank" rel="noopener" href="https://aws.amazon.com/blogs/database/monitoring-best-practices-with-amazon-elasticache-for-redis-using-amazon-cloudwatch/">Monitoring best practices with Amazon ElastiCache for Redis using Amazon CloudWatch</a><br>[6] <a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheMetrics.HostLevel.html">AWS ElastiCache Host-Level Metrics</a><br>[7] <a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheMetrics.Redis.html">AWS ElastiCache Metrics For Redis</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/" data-id="ckssnyyll0002kynd4mpddqjs" class="article-share-link">Share</a>
+      
+        <a href="http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticache/" rel="tag">elasticache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/09/12/gerrit-hint-point/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Gerrit 及多人協作的好姿勢</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/" rel="tag">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/" rel="tag">develop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticache/" rel="tag">elasticache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/" rel="tag">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%A6%E7%BF%92/" rel="tag">實習</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AWS/" style="font-size: 10px;">AWS</a> <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/develop/" style="font-size: 10px;">develop</a> <a href="/tags/elasticache/" style="font-size: 10px;">elasticache</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/%E5%AF%A6%E7%BF%92/" style="font-size: 20px;">實習</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/08/25/aws-elasticache-eviction/">淺談 AWS ElastiCache Redis 資料淘汰機制及相關 Metric</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/12/gerrit-hint-point/">Gerrit 及多人協作的好姿勢</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/13/Django-rest-framework/">Django 與 REST API 碰撞的火花</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/03/intern-day0/">實習生活 Day0</a>
+          </li>
+        
+          <li>
+            <a href="/2017/04/29/titan-intern-interview/">【實習】新加坡商鈦坦科技面試</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 YOGA / Jia-wei Yu<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'think-and-code';
+  
+  var disqus_url = 'http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  </div>
+</body>
+</html>
