@@ -86,3 +86,7 @@ feed:
 disqus_shortname: think-and-code
 
 excerpt_link: Read More
+
+# Third party
+cookieconsent:
+  enable: true
