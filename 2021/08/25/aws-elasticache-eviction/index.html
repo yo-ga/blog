@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!DOCTYPE html><html><head>
   <meta charset="utf-8">
   
   <title>淺談 AWS ElastiCache Redis 資料淘汰機制及相關 Metric | Think and Code</title>
@@ -13,8 +11,8 @@
 <meta property="og:description" content="這篇主要會談談 Redis 淘汰資料機制會如何觸發對應動作，及 AWS 上相關觀察的 Metric、Parameter Group Value。 前提之所以會需要去了解相關內容的機制，是因為在觀察到目前使用 ElastiCache 的記憶體用量頻頻升高，已有多次峰值超過 80%，所以試圖配合 CloudWatch 其他指標進行評估，確認是否需要更改大小以保環境穩定。然而這些指標之間代表的關係為何，">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2021-08-25T16:25:39.000Z">
-<meta property="article:modified_time" content="2021-08-26T08:28:13.717Z">
-<meta property="article:author" content="YOGA &#x2F; Jia-wei Yu">
+<meta property="article:modified_time" content="2021-08-26T14:53:34.538Z">
+<meta property="article:author" content="YOGA / Jia-wei Yu">
 <meta property="article:tag" content="AWS">
 <meta property="article:tag" content="redis">
 <meta property="article:tag" content="elasticache">
@@ -55,8 +53,8 @@ ga('send', 'pageview');
   ga('send', 'pageview');
 
 </script>
-  <script data-ad-client="ca-pub-8158220837725676" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<meta name="generator" content="Hexo 5.4.0"></head>
+  <script data-ad-client="ca-pub-8158220837725676" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"></head>
 
 <body>
   <div id="container">
@@ -86,13 +84,13 @@ ga('send', 'pageview');
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.yo-ga.space"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="http://blog.yo-ga.space"></form>
       </div>
     </div>
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-aws-elasticache-eviction" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-aws-elasticache-eviction" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2021/08/25/aws-elasticache-eviction/" class="article-date">
   <time datetime="2021-08-25T16:25:39.000Z" itemprop="datePublished">2021-08-25</time>
@@ -124,7 +122,7 @@ ga('send', 'pageview');
 </ul>
 <h2 id="Redis-如何淘汰資料"><a href="#Redis-如何淘汰資料" class="headerlink" title="Redis 如何淘汰資料"></a>Redis 如何淘汰資料</h2><p>在 Redis 淘汰資料這塊上，其實主要可以依觸發條件分成在兩種，一個是存活時間，另一個是資料使用量達到資料使用記憶體的最大允許量。</p>
 <h3 id="存活時間-TTL"><a href="#存活時間-TTL" class="headerlink" title="存活時間 (TTL)"></a>存活時間 (TTL)</h3><p>以存活時間來說比較簡單，就是依照存活時間設定，一旦到時限之前都尚未因各種原因刪除淘汰，就淘汰該 key。以下是用 Python 進行 TTL 設定。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta, datetime</span><br><span class="line"><span class="keyword">from</span> redis <span class="keyword">import</span> Redis</span><br><span class="line"></span><br><span class="line">client = Redis(host=<span class="string">&quot;redis.amazonaws.com&quot;</span>, port=<span class="string">&quot;6379&quot;</span>)</span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">&quot;key1&quot;</span>, <span class="string">&quot;data&quot;</span>, ex=timedelta(minutes=<span class="number">15</span>))  <span class="comment"># 15 分鐘後過期</span></span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">&quot;key1&quot;</span>, <span class="string">&quot;data&quot;</span>, ex=<span class="number">15</span>)  <span class="comment"># 15 秒後過期</span></span><br><span class="line"></span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">&quot;key2&quot;</span>, <span class="string">&quot;data2&quot;</span>)  <span class="comment"># 先設定資料不設定 ttl</span></span><br><span class="line">client.expireat(<span class="string">&quot;key2&quot;</span>, <span class="built_in">int</span>(datetime(<span class="number">2022</span>, <span class="number">11</span>, <span class="number">27</span>, <span class="number">21</span>, <span class="number">57</span>, <span class="number">42</span>, <span class="number">100</span>).timestamp()))  <span class="comment"># 設定特定過期時間 timestamp</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta, datetime</span><br><span class="line"><span class="keyword">from</span> redis <span class="keyword">import</span> Redis</span><br><span class="line"></span><br><span class="line">client = Redis(host=<span class="string">"redis.amazonaws.com"</span>, port=<span class="string">"6379"</span>)</span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">"key1"</span>, <span class="string">"data"</span>, ex=timedelta(minutes=<span class="number">15</span>))  <span class="comment"># 15 分鐘後過期</span></span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">"key1"</span>, <span class="string">"data"</span>, ex=<span class="number">15</span>)  <span class="comment"># 15 秒後過期</span></span><br><span class="line"></span><br><span class="line">client.<span class="built_in">set</span>(<span class="string">"key2"</span>, <span class="string">"data2"</span>)  <span class="comment"># 先設定資料不設定 ttl</span></span><br><span class="line">client.expireat(<span class="string">"key2"</span>, <span class="built_in">int</span>(datetime(<span class="number">2022</span>, <span class="number">11</span>, <span class="number">27</span>, <span class="number">21</span>, <span class="number">57</span>, <span class="number">42</span>, <span class="number">100</span>).timestamp()))  <span class="comment"># 設定特定過期時間 timestamp</span></span><br></pre></td></tr></tbody></table></figure>
 
 <p>針對過期處理，又可以分被動式 (passive) 跟主動式 (active) 淘汰兩種。被動是指當 client 有去接觸到 key 時，確認是否是否過期，若發現則 time out 掉。然而若照此做法，則可能會有許多需要淘汰掉但未曾使用過的 key 囤積，所以另外得靠 redis 進行處理，處理流程如下，而此流程則維持每秒 10 次的頻率進行。</p>
 <ol>
@@ -145,7 +143,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/" data-id="ckssnyyll0002kynd4mpddqjs" class="article-share-link">Share</a>
+      <a data-url="http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/" data-id="ckst1qhjt0002k5omcm7h9nt6" class="article-share-link">Share</a>
       
         <a href="http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -249,7 +247,7 @@ ga('send', 'pageview');
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2021 YOGA / Jia-wei Yu<br>
+      © 2021 YOGA / Jia-wei Yu<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -294,5 +292,5 @@ ga('send', 'pageview');
 
 
   </div>
-</body>
-</html>
+
+</body><script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script><script>window.addEventListener("load", function(){window.cookieconsent.initialise({"palette":{"popup":{"background":"#000"},"button":{"background":"#f1d600"}}})});</script></html>
