@@ -9,4 +9,4 @@ Disallow: /css/
 Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
-Sitemap: http://blog.yo-ga.net/sitemap.xml
+Sitemap: https://blog.yo-ga.space/sitemap.xml
