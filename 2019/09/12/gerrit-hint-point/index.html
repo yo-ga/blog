@@ -11,7 +11,7 @@
 <meta property="og:description" content="因為工作關係，面對及使用 Gerrit 將近一年。然而最近因部門內大家都開始集中開發，並提交到同一個 Repository，開始面對到一些因不良習慣產生的問題，並奔波於同事之間解決問題。今天這邊就簡單介紹一下 Gerrit 是什麼，以及在這種環境底下對初學者來說該如何妥善操作。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2019-09-12T12:05:14.000Z">
-<meta property="article:modified_time" content="2022-05-30T17:43:04.047Z">
+<meta property="article:modified_time" content="2022-05-30T17:43:31.058Z">
 <meta property="article:author" content="YOGA / Jia-wei Yu">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="gerrit">
@@ -54,7 +54,7 @@ ga('send', 'pageview');
 
 </script>
   <script data-ad-client="ca-pub-8158220837725676" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"></head>
+<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"></head>
 
 <body>
   <div id="container">
@@ -119,7 +119,7 @@ ga('send', 'pageview');
 <p>嚴格來說，他提供的功能就只有程式碼代管、權限控制、程式碼審查。使用者能從上頭將程式碼下載下來，修改並提交審查，待審查人員審核完畢後將這次修改合進目標分支。如果熟知 GitHub 或 GitLab 的讀者肯定會想說這不就是直接將這次的修改開在不同分支並將分支上傳，並開 PR (Pull Request) 讓對方知道這次改動即可？重點就在這邊。</p>
 <p>首先，Gerrit 除非伺服器端存在該分支，開發者不能直接在本地端建立其他分支並直接上傳。另外 Gerrit 在提交變更時不能直接推到目標分支，而是要推到 <code>refs/for/&lt;Branch Name&gt;</code> 上面等待審查。最後一點 Gerrit 將每次變更叫做 Change，當推上去伺服器時就是提交一次 Change，服務也會自動幫你開好，等同其他服務的 PR。這邊的 Change 也是單止一個 commit，當多個 commit 時視為多個 Change，而非其他服務將 PR 是做一串 commits。既然不能將整個分支上傳上去，那 Gerrit 就要找到其他方式辨識每次不同的 Change，那就是 Change ID。</p>
 <p>那 Change ID 是怎麼產生的呢？Gerrit 在你要 clone project 下來時有個選項，「Clone with commit-msg hook」，從中可以瞧見一點端倪。</p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> http://&lt;Gerrit IP&gt;/&lt;Project Name&gt; &amp;&amp; (<span class="built_in">cd</span> &lt;Project Name&gt; &amp;&amp; curl -kLo `git rev-parse --git-dir`/hooks/commit-msg http://&lt;Gerrit IP&gt;/tools/hooks/commit-msg; chmod +x `git rev-parse --git-dir`/hooks/commit-msg)</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> http://&lt;Gerrit IP&gt;/&lt;Project Name&gt; &amp;&amp; (<span class="built_in">cd</span> &lt;Project Name&gt; &amp;&amp; curl -kLo `git rev-parse --git-dir`/hooks/commit-msg http://&lt;Gerrit IP&gt;/tools/hooks/commit-msg; <span class="built_in">chmod</span> +x `git rev-parse --git-dir`/hooks/commit-msg)</span><br></pre></td></tr></tbody></table></figure>
 
 <p>也就是 Gerrit 有一段預先準備好的 script，將會替換掉原先 git commit-msg hook 的 script。然後當你建立新的 commit 時，便會自動在你的 commit massage 底下加上類似 <code>Change-Id: I02b2255dc2342342342342342323424340989233</code> 這樣的內容。當每次上傳時，就用 change ID 確認這是哪次的 Change，而利用該次 change 的 parent commit ID 辨識你要跟在哪個 commit 後面。所以就算你這次的 Commit ID 變了，只要是同一個 Change ID，你就會更改到同一個 Change。因為如此，當你的變更受到退回需要更改時，只要將檔案更改完後，將檔案 git add 加進紀錄，並執行 <code>git commit --amend</code> 並 push 到 <code>refs/for/&lt;Branch Name&gt;</code> 就成功了。</p>
 <h2 id="眉角"><a href="#眉角" class="headerlink" title="眉角"></a>眉角</h2><p>多人密集協作底下，基本上都是並行開發，也就是說一開始你是跟在 commit 1 後面，在你開發完後，可能早就有其他人提交 commit，伺服器上分支都已經到 commit 4 或 5，在這種情況下很容易出現 Conflict 狀況。對初學者而言，會因 Gerrit 不用上傳 Branch，而在本機上就直接在 master branch 上進行處理。一旦發生 Conflict，本機上又得折騰一番才能處理衝突。下面講一下我的習慣，當然沒有所謂的好壞，但能有效避免不必要的麻煩。另外也適用於其他 Service，只是將 master 代換成各自開發源頭分支，及部分步驟參考著用。</p>
@@ -143,7 +143,7 @@ ga('send', 'pageview');
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/" data-id="cl3t0re9w0005cvok38g93fdn" class="article-share-link">Share</a>
+      <a data-url="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/" data-id="cl3t0rzig0005dwn3gck55ir0" class="article-share-link">Share</a>
       
         <a href="http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/#disqus_thread" class="article-comment-link">Comments</a>
       

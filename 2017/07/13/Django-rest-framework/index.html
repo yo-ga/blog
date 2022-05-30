@@ -11,7 +11,7 @@
 <meta property="og:description" content="剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！ REST API先來說說 REST API，有關詳細解釋可以參考維基百科的說明頁面。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。 主要提出四點：  客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2017-07-13T14:55:39.000Z">
-<meta property="article:modified_time" content="2022-05-30T17:43:04.047Z">
+<meta property="article:modified_time" content="2022-05-30T17:43:31.058Z">
 <meta property="article:author" content="YOGA / Jia-wei Yu">
 <meta property="article:tag" content="實習">
 <meta name="twitter:card" content="summary">
@@ -52,7 +52,7 @@ ga('send', 'pageview');
 
 </script>
   <script data-ad-client="ca-pub-8158220837725676" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"></head>
+<meta name="generator" content="Hexo 6.2.0"><link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css"></head>
 
 <body>
   <div id="container">
@@ -136,14 +136,14 @@ ga('send', 'pageview');
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>比如說 Filter 就是提供條件篩選的方式提取資料，如果沒有 Framework，可能會需要針對不同情況進行解析及邏輯處理，只要多一種狀況可能性就會多出許多需要處理的 Filter，套用 Framework，讓你避免不必要的做事內容。</p>
 <p>Thortting 能輕鬆做出限制單位時間的流量或連線數，這如果是進行商業模式會是受限於主機成本，都能有效控管，使部署應用時，變得比較方便。</p>
 <p>Paginaton 則是在提供再提取資料時，若一次筆數過多，必須提供分段提取，而客戶端所收到的內容大致會有該次最大筆提取內容，以及下次提取內容時的 URL 或是 Token/Tag (依設計而定)，在下一次提取時，會有上一次及下一次的連結。如果不知道具體行為如何，可以去玩玩看 Facebook 的 Graph API，提取自己的動態時報資料，就能理解了。以 JSON 格式來看，大致如下：</p>
-<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">{</span><br><span class="line">	status:<span class="number">200</span>,</span><br><span class="line">	content:[</span><br><span class="line">		{...},</span><br><span class="line">		{...},</span><br><span class="line">		...</span><br><span class="line">		{...}</span><br><span class="line">	],</span><br><span class="line">	link:{</span><br><span class="line">		next_page:'http:<span class="comment">//example.com/page?tag=jfksdlfjlskdjflskdjfklsdj'</span></span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">	status<span class="punctuation">:</span><span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">	content<span class="punctuation">:</span><span class="punctuation">[</span></span><br><span class="line">		<span class="punctuation">{</span>...<span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">		<span class="punctuation">{</span>...<span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">		...</span><br><span class="line">		<span class="punctuation">{</span>...<span class="punctuation">}</span></span><br><span class="line">	<span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">	link<span class="punctuation">:</span><span class="punctuation">{</span></span><br><span class="line">		next_page<span class="punctuation">:</span>'http<span class="punctuation">:</span><span class="comment">//example.com/page?tag=jfksdlfjlskdjflskdjfklsdj'</span></span><br><span class="line">	<span class="punctuation">}</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
 
 <h2 id="小記"><a href="#小記" class="headerlink" title="小記"></a>小記</h2><p>其實這塊也是初次碰觸，如果之後對某些套件有更深的體悟時，或許會有針對某些套件的心得。最後當然老話一句，如果有任何想法，歡迎糾錯、切磋。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/" data-id="cl3t0re9p0001cvok7obk5s1j" class="article-share-link">Share</a>
+      <a data-url="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/" data-id="cl3t0rzi90001dwn35x3h72w3" class="article-share-link">Share</a>
       
         <a href="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/#disqus_thread" class="article-comment-link">Comments</a>
       
