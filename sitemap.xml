@@ -2,24 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.yo-ga.space/2017/04/26/what-is-lex/</loc>
-    
-    <lastmod>2022-10-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.yo-ga.space/about/index.html</loc>
-    
-    <lastmod>2022-10-25</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://blog.yo-ga.space/2017/07/13/Django-rest-framework/</loc>
     
     <lastmod>2022-10-25</lastmod>
@@ -66,6 +48,24 @@
   
   <url>
     <loc>http://blog.yo-ga.space/2017/04/29/titan-intern-interview/</loc>
+    
+    <lastmod>2022-10-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.yo-ga.space/2017/04/26/what-is-lex/</loc>
+    
+    <lastmod>2022-10-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.yo-ga.space/about/index.html</loc>
     
     <lastmod>2022-10-25</lastmod>
     
