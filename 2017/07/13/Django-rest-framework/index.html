@@ -11,7 +11,7 @@
 <meta property="og:description" content="剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！ REST API先來說說 REST API，有關詳細解釋可以參考維基百科的說明頁面。這邊我就僅僅提出部分重點，可以與後面的部分互相對應。 主要提出四點：  客戶端和伺服器結構：自從行動裝置的盛行，伺服器端必須提供給">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2017-07-13T14:55:39.000Z">
-<meta property="article:modified_time" content="2022-10-25T16:40:53.563Z">
+<meta property="article:modified_time" content="2022-10-27T00:45:05.204Z">
 <meta property="article:author" content="YOGA / Jia-wei Yu">
 <meta property="article:tag" content="實習">
 <meta name="twitter:card" content="summary">
@@ -130,7 +130,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/" data-id="cl9ofpiez0001hvooenbmds5v" class="article-share-link">Share</a>
+      <a data-url="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/" data-id="cl9qcg2by0001dcopenar73jr" class="article-share-link">Share</a>
       
         <a href="http://blog.yo-ga.space/2017/07/13/Django-rest-framework/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -180,7 +180,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Certification/" rel="tag">Certification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud/" rel="tag">Cloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/" rel="tag">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/" rel="tag">develop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticache/" rel="tag">elasticache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/" rel="tag">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%A6%E7%BF%92/" rel="tag">實習</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AWS/" rel="tag">AWS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Certification/" rel="tag">Certification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cloud/" rel="tag">Cloud</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SRE/" rel="tag">SRE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/compiler/" rel="tag">compiler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/develop/" rel="tag">develop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticache/" rel="tag">elasticache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gerrit/" rel="tag">gerrit</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%A6%E7%BF%92/" rel="tag">實習</a></li></ul>
     </div>
   </div>
 
@@ -190,7 +190,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/Certification/" style="font-size: 10px;">Certification</a> <a href="/tags/Cloud/" style="font-size: 10px;">Cloud</a> <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/develop/" style="font-size: 10px;">develop</a> <a href="/tags/elasticache/" style="font-size: 10px;">elasticache</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/%E5%AF%A6%E7%BF%92/" style="font-size: 20px;">實習</a>
+      <a href="/tags/AWS/" style="font-size: 15px;">AWS</a> <a href="/tags/Certification/" style="font-size: 10px;">Certification</a> <a href="/tags/Cloud/" style="font-size: 10px;">Cloud</a> <a href="/tags/SRE/" style="font-size: 10px;">SRE</a> <a href="/tags/compiler/" style="font-size: 10px;">compiler</a> <a href="/tags/develop/" style="font-size: 10px;">develop</a> <a href="/tags/elasticache/" style="font-size: 10px;">elasticache</a> <a href="/tags/gerrit/" style="font-size: 10px;">gerrit</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/redis/" style="font-size: 15px;">redis</a> <a href="/tags/%E5%AF%A6%E7%BF%92/" style="font-size: 20px;">實習</a>
     </div>
   </div>
 
@@ -199,7 +199,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul>
     </div>
   </div>
 
@@ -210,6 +210,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/10/25/redis-memory-analysis-with-rdb/">小記 - Redis memory 分析</a>
+          </li>
         
           <li>
             <a href="/2022/04/11/aws-saa-certificate/">寫於低空飛過之後：AWS SAA-C02 考後心得</a>
@@ -225,10 +229,6 @@
         
           <li>
             <a href="/2017/07/13/Django-rest-framework/">Django 與 REST API 碰撞的火花</a>
-          </li>
-        
-          <li>
-            <a href="/2017/07/03/intern-day0/">實習生活 Day0</a>
           </li>
         
       </ul>
