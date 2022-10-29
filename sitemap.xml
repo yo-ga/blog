@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://blog.yo-ga.space/2017/04/29/titan-intern-interview/</loc>
+    <loc>https://blog.yo-ga.space/2017/07/13/Django-rest-framework/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/2017/04/26/what-is-lex/</loc>
+    <loc>https://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/about/index.html</loc>
+    <loc>https://blog.yo-ga.space/2022/04/11/aws-saa-certificate/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/2017/07/13/Django-rest-framework/</loc>
+    <loc>https://blog.yo-ga.space/2019/09/12/gerrit-hint-point/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/</loc>
+    <loc>https://blog.yo-ga.space/2017/07/03/intern-day0/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/2022/04/11/aws-saa-certificate/</loc>
+    <loc>https://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/2019/09/12/gerrit-hint-point/</loc>
+    <loc>https://blog.yo-ga.space/2017/04/29/titan-intern-interview/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/2017/07/03/intern-day0/</loc>
+    <loc>https://blog.yo-ga.space/2017/04/26/what-is-lex/</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/</loc>
+    <loc>https://blog.yo-ga.space/about/index.html</loc>
     
     <lastmod>2022-10-29</lastmod>
     
@@ -84,7 +84,7 @@
   
 
   <url>
-    <loc>http://blog.yo-ga.space/</loc>
+    <loc>https://blog.yo-ga.space/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -92,77 +92,77 @@
 
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/%E5%AF%A6%E7%BF%92/</loc>
+    <loc>https://blog.yo-ga.space/tags/%E5%AF%A6%E7%BF%92/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/AWS/</loc>
+    <loc>https://blog.yo-ga.space/tags/AWS/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/redis/</loc>
+    <loc>https://blog.yo-ga.space/tags/redis/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/elasticache/</loc>
+    <loc>https://blog.yo-ga.space/tags/elasticache/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/Cloud/</loc>
+    <loc>https://blog.yo-ga.space/tags/Cloud/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/Certification/</loc>
+    <loc>https://blog.yo-ga.space/tags/Certification/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/git/</loc>
+    <loc>https://blog.yo-ga.space/tags/git/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/gerrit/</loc>
+    <loc>https://blog.yo-ga.space/tags/gerrit/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/develop/</loc>
+    <loc>https://blog.yo-ga.space/tags/develop/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/SRE/</loc>
+    <loc>https://blog.yo-ga.space/tags/SRE/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://blog.yo-ga.space/tags/compiler/</loc>
+    <loc>https://blog.yo-ga.space/tags/compiler/</loc>
     <lastmod>2022-10-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

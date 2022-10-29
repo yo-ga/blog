@@ -6,12 +6,12 @@
   <meta name="description" content="近期工作上因頻頻發出 redis 記憶體用量告警，故不得不去嘗試分析目前的 Redis 使用分佈，並進行盤點，進而方便後續服務的調整。這邊稍微紀錄幾種方式並寫下配合 RDB 的分析過程，以備不時之需。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="小記 - Redis memory 分析">
-<meta property="og:url" content="http://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/index.html">
+<meta property="og:url" content="https://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/index.html">
 <meta property="og:site_name" content="Think and Code">
 <meta property="og:description" content="近期工作上因頻頻發出 redis 記憶體用量告警，故不得不去嘗試分析目前的 Redis 使用分佈，並進行盤點，進而方便後續服務的調整。這邊稍微紀錄幾種方式並寫下配合 RDB 的分析過程，以備不時之需。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2022-10-25T16:58:37.000Z">
-<meta property="article:modified_time" content="2022-10-29T08:52:12.586Z">
+<meta property="article:modified_time" content="2022-10-29T08:56:59.034Z">
 <meta property="article:author" content="YOGA / Jia-wei Yu">
 <meta property="article:tag" content="redis">
 <meta property="article:tag" content="SRE">
@@ -70,7 +70,7 @@
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="http://blog.yo-ga.space"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"></button><input type="hidden" name="sitesearch" value="https://blog.yo-ga.space"></form>
       </div>
     </div>
   </div>
@@ -125,9 +125,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/" data-id="cl9toq6x60009dbopbv2j91k1" class="article-share-link">Share</a>
+      <a data-url="https://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/" data-id="cl9towccz0009dpouegdodmp0" class="article-share-link">Share</a>
       
-        <a href="http://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SRE/" rel="tag">SRE</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li></ul>
@@ -246,7 +246,7 @@
 <script>
   var disqus_shortname = 'think-and-code';
   
-  var disqus_url = 'http://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/';
+  var disqus_url = 'https://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/';
   
   (function(){
     var dsq = document.createElement('script');
