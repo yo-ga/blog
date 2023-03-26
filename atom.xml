@@ -6,7 +6,7 @@
   <link href="https://blog.yo-ga.space/atom.xml" rel="self"/>
   
   <link href="https://blog.yo-ga.space/"/>
-  <updated>2023-03-26T09:25:52.431Z</updated>
+  <updated>2023-03-26T09:26:17.629Z</updated>
   <id>https://blog.yo-ga.space/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/"/>
     <id>https://blog.yo-ga.space/2022/10/25/redis-memory-analysis-with-rdb/</id>
     <published>2022-10-25T16:58:37.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
     <summary type="html">&lt;p&gt;近期工作上因頻頻發出 redis 記憶體用量告警，故不得不去嘗試分析目前的 Redis 使用分佈，並進行盤點，進而方便後續服務的調整。這邊稍微紀錄幾種方式並寫下配合 RDB 的分析過程，以備不時之需。</summary>
@@ -40,7 +40,7 @@
     <link href="https://blog.yo-ga.space/2022/04/11/aws-saa-certificate/"/>
     <id>https://blog.yo-ga.space/2022/04/11/aws-saa-certificate/</id>
     <published>2022-04-11T17:08:50.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
     <summary type="html">&lt;p&gt;作為網路上眾多分享文章的受益者，小弟就不在此額外獻醜，何況自己這次的準備方法也沒有學生時代時的認真與穩健，更不適合作為後繼者的借鑑。這次的分享重點就稍微調整一下，談談透過今年改版的資訊來一窺官方想引導的雲端方向，以及小弟個人對於證照的想法。</summary>
@@ -61,7 +61,7 @@
     <link href="https://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/"/>
     <id>https://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/</id>
     <published>2021-08-25T16:25:39.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
     <summary type="html">&lt;p&gt;這篇主要會談談 Redis 淘汰資料機制會如何觸發對應動作，及 AWS 上相關觀察的 Metric、Parameter Group Value。&lt;/p&gt;
@@ -83,7 +83,7 @@
     <link href="https://blog.yo-ga.space/2019/09/12/gerrit-hint-point/"/>
     <id>https://blog.yo-ga.space/2019/09/12/gerrit-hint-point/</id>
     <published>2019-09-12T12:05:14.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
     <summary type="html">&lt;p&gt;因為工作關係，面對及使用 Gerrit 將近一年。然而最近因部門內大家都開始集中開發，並提交到同一個 Repository，開始面對到一些因不良習慣產生的問題，並奔波於同事之間解決問題。今天這邊就簡單介紹一下 Gerrit 是什麼，以及在這種環境底下對初學者來說該如何妥善操作。</summary>
@@ -104,7 +104,7 @@
     <link href="https://blog.yo-ga.space/2017/07/13/Django-rest-framework/"/>
     <id>https://blog.yo-ga.space/2017/07/13/Django-rest-framework/</id>
     <published>2017-07-13T14:55:39.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
     <summary type="html">&lt;p&gt;剛好在實習時接觸到 Django 和 REST API 的概念，所以就來整理跟分享與 Django REST Framework 有關的部分吧！如果有任何想法或是疑問，都可以再討論喔！&lt;/p&gt;
@@ -126,7 +126,7 @@
     <link href="https://blog.yo-ga.space/2017/07/03/intern-day0/"/>
     <id>https://blog.yo-ga.space/2017/07/03/intern-day0/</id>
     <published>2017-07-03T23:52:29.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
       
@@ -147,7 +147,7 @@
     <link href="https://blog.yo-ga.space/2017/04/29/titan-intern-interview/"/>
     <id>https://blog.yo-ga.space/2017/04/29/titan-intern-interview/</id>
     <published>2017-04-29T13:39:22.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
     <summary type="html">&lt;p&gt;這篇是實習文的第一篇，之後如果有其他面試也會跟上。廢話不多說，直接進行吧。&lt;br&gt;這篇的主題是新加坡商鈦坦科技，也算是今年第一家正式面試的公司。&lt;/p&gt;
@@ -166,7 +166,7 @@
     <link href="https://blog.yo-ga.space/2017/04/26/what-is-lex/"/>
     <id>https://blog.yo-ga.space/2017/04/26/what-is-lex/</id>
     <published>2017-04-26T01:30:43.000Z</published>
-    <updated>2023-03-26T09:25:52.431Z</updated>
+    <updated>2023-03-26T09:26:17.629Z</updated>
     
     
     <summary type="html">&lt;p&gt;因為系上 Compiler 課程上到 Lex &amp;amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！&lt;/p&gt;</summary>
