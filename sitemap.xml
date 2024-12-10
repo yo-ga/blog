@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://blog.yo-ga.space/2019/09/12/gerrit-hint-point/</loc>
+    <loc>https://blog.yo-ga.space/2022/04/11/aws-saa-certificate/</loc>
     
     <lastmod>2024-12-10</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://blog.yo-ga.space/2022/04/11/aws-saa-certificate/</loc>
+    <loc>https://blog.yo-ga.space/2019/09/12/gerrit-hint-point/</loc>
     
     <lastmod>2024-12-10</lastmod>
     
@@ -120,6 +120,20 @@
   </url>
   
   <url>
+    <loc>https://blog.yo-ga.space/tags/Cloud/</loc>
+    <lastmod>2024-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.yo-ga.space/tags/Certification/</loc>
+    <lastmod>2024-12-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.yo-ga.space/tags/git/</loc>
     <lastmod>2024-12-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -135,20 +149,6 @@
   
   <url>
     <loc>https://blog.yo-ga.space/tags/develop/</loc>
-    <lastmod>2024-12-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.yo-ga.space/tags/Cloud/</loc>
-    <lastmod>2024-12-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.yo-ga.space/tags/Certification/</loc>
     <lastmod>2024-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
