@@ -11,7 +11,7 @@
 <meta property="og:description" content="這篇主要會談談 Redis 淘汰資料機制會如何觸發對應動作，及 AWS 上相關觀察的 Metric、Parameter Group Value。 前提之所以會需要去了解相關內容的機制，是因為在觀察到目前使用 ElastiCache 的記憶體用量頻頻升高，已有多次峰值超過 80%，所以試圖配合 CloudWatch 其他指標進行評估，確認是否需要更改大小以保環境穩定。然而這些指標之間代表的關係為何，">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2021-08-25T16:25:39.000Z">
-<meta property="article:modified_time" content="2024-12-10T00:06:11.998Z">
+<meta property="article:modified_time" content="2024-12-10T00:07:13.088Z">
 <meta property="article:author" content="YOGA / Jia-wei Yu">
 <meta property="article:tag" content="AWS">
 <meta property="article:tag" content="redis">
@@ -123,14 +123,14 @@
 <h2 id="服務監測數值"><a href="#服務監測數值" class="headerlink" title="服務監測數值"></a>服務監測數值</h2><p>基本上，講完設定方式後，後續就剩下作為維運團隊需要觀察哪些參數，以了解各項數據的成長趨勢及發生特定事件的時間點。在這邊就主要以 AWS CloudWatch 及 Redis <code>INFO</code> 指令有的參數作為說明對照。</p>
 <h3 id="記憶體相關"><a href="#記憶體相關" class="headerlink" title="記憶體相關"></a>記憶體相關</h3><p>主要會確認用了多少記憶體，還剩下多少可以使用，而 CloudWatch 有 <code>FreeableMemory</code> 可以知道系統還有多少可以使用，也有 <code>DatabaseMemoryUsagePercentage</code> 可以知道所用記憶體的百分比，很多人一開始會以為這兩項是可以直接互通的，然而實際上雖然同樣是記憶體相關，但兩個卻有些不同。<code>FreeableMemory</code> 是指以 Instance 角度來看，有多少空閒記億體可以使用，所以這個參數會包含前面的保留記憶體。<code>DatabaseMemoryUsagePercentage</code> 是在 Redis 中下 <code>INFO</code> 拿 <code>used_memory</code> 除以 <code>maxmemory</code> 所得，而前面有提到這邊的 <code>maxmemory</code> 是扣除保留記憶體的。所以在預設狀況下會出現 <code>DatabaseMemoryUsagePercentage</code> 已經 100%，但 <code>FreeableMemory</code> 仍有 instance 約四分之一的記憶體未使用。</p>
 <p>Redis <code>INFO</code> 中 <code>used_memory</code> 指的是 Redis allocator 所佔用的容量，然而這些 allocator 有一小部分是 Redis 服務本身自帶的，這個容量則被記於 Redis <code>INFO</code> 中的 <code>used_memory_overhead</code> 中。至於 Redis 服務剛起來不屬於 allocator 的則被獨立在 <code>used_memory</code> 外，記於 <code>used_memory_startup</code>。</p>
-<h3 id="Expired-amp-Evicted"><a href="#Expired-amp-Evicted" class="headerlink" title="Expired &amp; Evicted"></a>Expired &amp; Evicted</h3><p>在成功觸發 Eviction policy 淘汰資料時，Redis <code>INFO</code> 中 <code>evicted_keys</code> 會累計，直到重啟 service，然而 CloudWatch 中的 <code>Evictions</code> 則是記錄每個時間點因觸發 Eviction Policy 淘汰的數量。在過期資料下也有同樣狀況，只是 Redis 中換成 <code>expired_keys</code>，CloudWatch 中變成 <code>Reclaimed</code>。</p>
+<h3 id="Expired-Evicted"><a href="#Expired-Evicted" class="headerlink" title="Expired &amp; Evicted"></a>Expired &amp; Evicted</h3><p>在成功觸發 Eviction policy 淘汰資料時，Redis <code>INFO</code> 中 <code>evicted_keys</code> 會累計，直到重啟 service，然而 CloudWatch 中的 <code>Evictions</code> 則是記錄每個時間點因觸發 Eviction Policy 淘汰的數量。在過期資料下也有同樣狀況，只是 Redis 中換成 <code>expired_keys</code>，CloudWatch 中變成 <code>Reclaimed</code>。</p>
 <h2 id="後記"><a href="#後記" class="headerlink" title="後記"></a>後記</h2><p>這篇算是換工作後重拾 blog，就當作未來工作上的 survey、筆記或備忘錄吧！同時提供給有同樣狀況、需求的<del>未來的自己</del>工程師們一個參考或借鏡。</p>
 <h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><p>[1] <a target="_blank" rel="noopener" href="https://redis-py.readthedocs.io/en/stable/">Redis-py Document</a><br>[2] <a target="_blank" rel="noopener" href="https://redis.io/commands/expire#how-redis-expires-keys">How Redis expires keys</a><br>[3] <a target="_blank" rel="noopener" href="https://redis.io/topics/lru-cache">Using Redis as an LRU cache</a><br>[4] <a target="_blank" rel="noopener" href="https://redis.io/commands/INFO#notes">Redis INFO Command</a><br>[5] <a target="_blank" rel="noopener" href="https://aws.amazon.com/blogs/database/monitoring-best-practices-with-amazon-elasticache-for-redis-using-amazon-cloudwatch/">Monitoring best practices with Amazon ElastiCache for Redis using Amazon CloudWatch</a><br>[6] <a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheMetrics.HostLevel.html">AWS ElastiCache Host-Level Metrics</a><br>[7] <a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/CacheMetrics.Redis.html">AWS ElastiCache Metrics For Redis</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/" data-id="cm4hpb7en0002i7one7r598q6" class="article-share-link">Share</a>
+      <a data-url="https://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/" data-id="cm4hpcitl0002gwq4hjg8aqwp" class="article-share-link">Share</a>
       
         <a href="https://blog.yo-ga.space/2021/08/25/aws-elasticache-eviction/#disqus_thread" class="article-comment-link">Comments</a>
       

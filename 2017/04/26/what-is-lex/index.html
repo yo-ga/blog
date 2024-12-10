@@ -11,7 +11,7 @@
 <meta property="og:description" content="因為系上 Compiler 課程上到 Lex &amp; Yacc，但是不論講義還是網路上資源都僅僅皮毛而已，總覺得搔不到邊，只好自己借歐禮萊的書自己 K。至於這篇文章就當作是閱讀筆記吧，希望能造福更多被 Lex 荼毒的眾生，至於 Yacc 就等後集待續吧！">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2017-04-26T01:30:43.000Z">
-<meta property="article:modified_time" content="2024-12-10T00:06:11.998Z">
+<meta property="article:modified_time" content="2024-12-10T00:07:13.088Z">
 <meta property="article:author" content="YOGA / Jia-wei Yu">
 <meta property="article:tag" content="compiler">
 <meta name="twitter:card" content="summary">
@@ -168,7 +168,7 @@
 <h3 id="User-Subroutines-Section"><a href="#User-Subroutines-Section" class="headerlink" title="User Subroutines Section"></a>User Subroutines Section</h3><p>簡單來說就是 Main Function 啦！如果你前兩個 section 處理得不錯，那代表這裡只需要用最單純的部分，</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int main()</span><br><span class="line">{</span><br><span class="line">	yylex();</span><br><span class="line">	return(0);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>但其實 Lex 還是有提供 yywrap() 的 function 自定義，只是究竟該如何使用還沒搞清楚，如果搞清楚了再告訴各位。</p>
-<h2 id="Lex-編譯-amp-執行"><a href="#Lex-編譯-amp-執行" class="headerlink" title="Lex 編譯 &amp; 執行"></a>Lex 編譯 &amp; 執行</h2><p>這邊先假設大家都是在 Unix 的環境下，已經有 gcc 及 flex，可以進行處理，如果還沒，請左轉出去問問 Google 大神。<br>我的習慣會準備一個輸入檔，接著假設你的 Lex file 是 test.l，輸入檔是 input.txt。<br>開啟命令列，打入</p>
+<h2 id="Lex-編譯-執行"><a href="#Lex-編譯-執行" class="headerlink" title="Lex 編譯 &amp; 執行"></a>Lex 編譯 &amp; 執行</h2><p>這邊先假設大家都是在 Unix 的環境下，已經有 gcc 及 flex，可以進行處理，如果還沒，請左轉出去問問 Google 大神。<br>我的習慣會準備一個輸入檔，接著假設你的 Lex file 是 test.l，輸入檔是 input.txt。<br>開啟命令列，打入</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flex test.l</span><br></pre></td></tr></tbody></table></figure>
 <p>接著輸入</p>
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc yy.lex.c -o <span class="built_in">test</span></span><br></pre></td></tr></tbody></table></figure>
@@ -181,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://blog.yo-ga.space/2017/04/26/what-is-lex/" data-id="cm4hpb7ev000di7on1km08qtt" class="article-share-link">Share</a>
+      <a data-url="https://blog.yo-ga.space/2017/04/26/what-is-lex/" data-id="cm4hpcits000dgwq4113vbisu" class="article-share-link">Share</a>
       
         <a href="https://blog.yo-ga.space/2017/04/26/what-is-lex/#disqus_thread" class="article-comment-link">Comments</a>
       
